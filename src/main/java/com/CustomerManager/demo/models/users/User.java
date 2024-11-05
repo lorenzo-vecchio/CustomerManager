@@ -1,6 +1,8 @@
-package com.CustomerManager.demo.models.user;
+package com.CustomerManager.demo.models.users;
 
 import com.CustomerManager.demo.annotations.ValidFiscalCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @MappedSuperclass
+@DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -52,6 +56,8 @@ public class User implements UserDetails {
     private String email;
 
     @NotNull
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @ValidFiscalCode

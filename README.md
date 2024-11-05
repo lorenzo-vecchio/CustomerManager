@@ -1,0 +1,1 @@
+docs are at ["/scalar-docs.html"](http://localhost:8080/scalar-docs.html)

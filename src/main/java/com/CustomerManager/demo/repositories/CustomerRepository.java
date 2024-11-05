@@ -1,6 +1,6 @@
 package com.CustomerManager.demo.repositories;
 
-import com.CustomerManager.demo.models.user.Customer;
+import com.CustomerManager.demo.models.users.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
