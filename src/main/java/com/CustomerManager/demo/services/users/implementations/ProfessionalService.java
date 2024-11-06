@@ -74,9 +74,7 @@ public class ProfessionalService implements UserServiceCrudInterface<Professiona
     @Transactional
     public Optional<Professional> delete(UUID id) {
         Optional<Professional> user = professionalRepository.findById(id);
-        if (user.isPresent()) {
-            professionalRepository.delete(user.get());
-        }
+        user.ifPresent(professional -> professionalRepository.delete(professional));
         return user;
     }
 }

@@ -74,9 +74,7 @@ public class AdminService implements UserServiceCrudInterface<Admin> {
     @Transactional
     public Optional<Admin> delete(UUID id) {
         Optional<Admin> user = adminRepository.findById(id);
-        if (user.isPresent()) {
-            adminRepository.delete(user.get());
-        }
+        user.ifPresent(admin -> adminRepository.delete(admin));
         return user;
     }
 }

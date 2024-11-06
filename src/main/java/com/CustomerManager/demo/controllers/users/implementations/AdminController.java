@@ -46,7 +46,8 @@ public class AdminController implements UserControllerCrudInterface<Admin> {
     public ResponseEntity<Page<Admin>> read(
             @SortDefault(sort = "id")
             @PageableDefault(size = 15)
-            @ParameterObject final Pageable pageable) {
+            @ParameterObject final Pageable pageable
+    ) {
         return ResponseEntity.ok(adminService.read(pageable));
     }
 
