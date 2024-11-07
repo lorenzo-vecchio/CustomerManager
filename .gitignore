@@ -34,3 +34,5 @@ build/
 
 ### Application ###
 **/system_info.properties
+.env
+**.env
