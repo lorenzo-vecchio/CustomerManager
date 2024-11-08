@@ -8,6 +8,8 @@ import com.CustomerManager.demo.services.users.interfaces.UserServiceCrudInterfa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,11 @@ public class AdminService implements UserServiceCrudInterface<Admin> {
     @Override
     @Transactional
     public Admin create(CreateUserDTO createUserDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Admin creator = (Admin) authentication.getPrincipal();
+
         Admin admin = new Admin();
+        admin.setCreatedBy(creator);
         admin.setFirstName(createUserDTO.getFirstName());
         admin.setLastName(createUserDTO.getLastName());
         admin.setEmail(createUserDTO.getEmail());

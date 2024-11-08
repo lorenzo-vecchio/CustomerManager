@@ -1,9 +1,9 @@
 package com.CustomerManager.demo.services.users.implementations;
 
 import com.CustomerManager.demo.DTOs.users.CreateUserDTO;
-import com.CustomerManager.demo.models.users.Admin;
+import com.CustomerManager.demo.models.users.Customer;
 import com.CustomerManager.demo.models.users.Professional;
-import com.CustomerManager.demo.repositories.ProfessionalRepository;
+import com.CustomerManager.demo.repositories.CustomerRepository;
 import com.CustomerManager.demo.services.users.interfaces.UserServiceCrudInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,14 +14,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class ProfessionalService implements UserServiceCrudInterface<Professional> {
+public class CustomerService implements UserServiceCrudInterface<Customer> {
 
     @Autowired
-    private ProfessionalRepository professionalRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -31,17 +33,18 @@ public class ProfessionalService implements UserServiceCrudInterface<Professiona
     // --------------------------------------------------------------------------------------------
     @Override
     @Transactional
-    public Professional create(CreateUserDTO createUserDTO) {
+    public Customer create(CreateUserDTO createUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Admin creator = (Admin) authentication.getPrincipal();
+        List<Professional> professionals = new ArrayList<>();
+        professionals.add((Professional) authentication.getPrincipal());
 
-        Professional professional = new Professional();
-        professional.setCreatedBy(creator);
-        professional.setFirstName(createUserDTO.getFirstName());
-        professional.setLastName(createUserDTO.getLastName());
-        professional.setEmail(createUserDTO.getEmail());
-        professional.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
-        return professionalRepository.save(professional);
+        Customer customer = new Customer();
+        customer.setProfessionals(professionals);
+        customer.setFirstName(createUserDTO.getFirstName());
+        customer.setLastName(createUserDTO.getLastName());
+        customer.setEmail(createUserDTO.getEmail());
+        customer.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
+        return customerRepository.save(customer);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -49,25 +52,27 @@ public class ProfessionalService implements UserServiceCrudInterface<Professiona
     // --------------------------------------------------------------------------------------------
     @Override
     @Transactional(readOnly = true)
-    public Optional<Professional> read(UUID id) {
-        return professionalRepository.findById(id);
+    public Optional<Customer> read(UUID id) {
+        return customerRepository.findById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Professional> read(Pageable pageable) {
-        return professionalRepository.findAll(pageable);
+    public Page<Customer> read(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Professional> professionals = new ArrayList<>();
+        professionals.add((Professional) authentication.getPrincipal());
+        return customerRepository.findCustomersByProfessionals(professionals, pageable);
     }
 
     // --------------------------------------------------------------------------------------------
     // --------------------------------------- UPDATE ---------------------------------------------
     // --------------------------------------------------------------------------------------------
     @Override
-    @Transactional
-    public Optional<Professional> update(Professional user) {
-        Optional<Professional> ogAdmin = professionalRepository.findById(user.getId());
-        if (ogAdmin.isPresent()) {
-            return Optional.of(professionalRepository.save(user));
+    public Optional<Customer> update(Customer user) {
+        Optional<Customer> customer = customerRepository.findById(user.getId());
+        if (customer.isPresent()) {
+            return Optional.of(customerRepository.save(user));
         } else {
             return Optional.empty();
         }
@@ -77,10 +82,9 @@ public class ProfessionalService implements UserServiceCrudInterface<Professiona
     // --------------------------------------- DELETE ---------------------------------------------
     // --------------------------------------------------------------------------------------------
     @Override
-    @Transactional
-    public Optional<Professional> delete(UUID id) {
-        Optional<Professional> user = professionalRepository.findById(id);
-        user.ifPresent(professional -> professionalRepository.delete(professional));
+    public Optional<Customer> delete(UUID id) {
+        Optional<Customer> user = customerRepository.findById(id);
+        user.ifPresent(customer -> customerRepository.delete(customer));
         return user;
     }
 }

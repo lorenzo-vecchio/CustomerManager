@@ -1,6 +1,7 @@
 package com.CustomerManager.demo.models.users;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +30,11 @@ public class Admin extends User {
     }
 
     @OneToMany
-    List<Professional> professionals;
+    List<Admin> createdAdmins;
+
+    @OneToMany
+    List<Professional> createdProfessionals;
+
+    @ManyToOne
+    Admin createdBy;
 }

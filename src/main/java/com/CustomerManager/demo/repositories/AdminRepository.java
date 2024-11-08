@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, UUID> {
-    Optional<Admin> findAdminById(UUID id);
     Optional<Admin> findAdminByEmail(String email);
     Page<Admin> findAll(Pageable pageable);
     long count();

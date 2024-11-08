@@ -9,6 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface ProfessionalRepository extends JpaRepository<Professional, UUID> {
-    Optional<Professional> findProfessionalById(UUID id);
     Optional<Professional> findProfessionalByEmail(String email);
 }
