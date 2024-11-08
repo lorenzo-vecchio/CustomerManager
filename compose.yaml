@@ -4,10 +4,10 @@ services:
   mysql:
     image: "mysql:latest"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USERNAME}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${CM_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${CM_MYSQL_DATABASE}
+      MYSQL_USER: ${CM_MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${CM_MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
